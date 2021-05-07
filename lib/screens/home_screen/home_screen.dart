@@ -14,7 +14,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to Flutter'),
+        title: Center(
+          child: Text('Play with Bloc'),
+        ),
       ),
       body: Column(
         children: [RenderHeader(), renderListMenu()],
@@ -29,15 +31,12 @@ class RenderHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        flex: 1,
+        flex: 2,
         child: Container(
-          child: Center(
-            child: Text(
-              "Flutter - play with Bloc",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ));
+            margin: new EdgeInsets.all(20.0),
+            child: Image(
+              image: AssetImage("asset/image-background-1.jpg"),
+            )));
   }
 }
 
@@ -50,6 +49,7 @@ class renderListMenu extends StatelessWidget {
         flex: 3,
         child: Container(
             child: GridView.count(
+          physics: new ScrollPhysics(),
           crossAxisCount: 3,
           children: List.generate(HomeMenuList.length, (index) {
             return Center(child: GridItem(index: index));
@@ -65,18 +65,31 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Expanded(
-              child: Image(
-                  image: NetworkImage(
-                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'))),
-          Expanded(
-              child: Center(
-            child: Text("${HomeMenuList[index]}"),
-          ))
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(color: Colors.blue[100], spreadRadius: 3),
         ],
+      ),
+      margin: new EdgeInsets.all(20.0),
+      child: Center(
+        child: TextButton(
+          onPressed: () {},
+          child: Column(
+            children: [
+              Expanded(
+                  child: Image(
+                      image: AssetImage("${HomeMenuList[index].images}"))),
+              Expanded(
+                  child: Center(
+                child: Text(
+                  "${HomeMenuList[index].tile}",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ))
+            ],
+          ),
+        ),
       ),
     );
   }
