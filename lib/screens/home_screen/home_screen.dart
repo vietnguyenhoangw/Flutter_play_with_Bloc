@@ -10,6 +10,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  _onPressMenuItem(int index) {
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushNamed('/counter');
+        break;
+      case 1:
+        break;
+      default:
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,17 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Column(
-        children: [RenderHeader(), renderListMenu()],
+        children: [_renderHeader(context), _renderListMenu(context)],
       ),
     );
   }
-}
 
-class RenderHeader extends StatelessWidget {
-  const RenderHeader({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _renderHeader(BuildContext context) {
     return Expanded(
         flex: 2,
         child: Container(
@@ -38,13 +45,8 @@ class RenderHeader extends StatelessWidget {
               image: AssetImage("asset/image-background-1.jpg"),
             )));
   }
-}
 
-class renderListMenu extends StatelessWidget {
-  const renderListMenu({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _renderListMenu(BuildContext context) {
     return Expanded(
         flex: 3,
         child: Container(
@@ -52,18 +54,12 @@ class renderListMenu extends StatelessWidget {
           physics: new ScrollPhysics(),
           crossAxisCount: 3,
           children: List.generate(HomeMenuList.length, (index) {
-            return Center(child: GridItem(index: index));
+            return Center(child: _renderMenuItem(context, index));
           }),
         )));
   }
-}
 
-class GridItem extends StatelessWidget {
-  const GridItem({Key key, this.index}) : super(key: key);
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _renderMenuItem(BuildContext context, int index) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -74,7 +70,7 @@ class GridItem extends StatelessWidget {
       margin: new EdgeInsets.all(20.0),
       child: Center(
         child: TextButton(
-          onPressed: () {},
+          onPressed: () => _onPressMenuItem(index),
           child: Column(
             children: [
               Expanded(
