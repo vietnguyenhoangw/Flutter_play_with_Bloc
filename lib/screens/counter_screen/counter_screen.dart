@@ -12,22 +12,55 @@ class CounterScreen extends StatefulWidget {
 }
 
 class _CounterScreenState extends State<CounterScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  _showSnackBar(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+      ),
+    );
+  }
+
+  _hideSnackBar() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  }
+
   _onPressIncrease() {
-    BlocProvider.of<CounterBloc>(context).add(IncreaseCounter());
+    _hideSnackBar();
+    int currentCounter = BlocProvider.of<CounterBloc>(context).state.counter;
+    if (currentCounter >= 50) {
+      _showSnackBar("Current counter can't increase more", Colors.green[500]);
+    } else {
+      BlocProvider.of<CounterBloc>(context).add(IncreaseCounter());
+    }
   }
 
   _onPressDecrease() {
-    BlocProvider.of<CounterBloc>(context).add(DecreaseCounter());
+    _hideSnackBar();
+    int currentCounter = BlocProvider.of<CounterBloc>(context).state.counter;
+    if (currentCounter == 0) {
+      _showSnackBar("Current counter can't decrease more", Colors.red);
+    } else {
+      BlocProvider.of<CounterBloc>(context).add(DecreaseCounter());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
-      return Scaffold(
-          appBar: AppBar(title: Text('Counter')),
-          body: _renderContent(context),
-          floatingActionButton: _renderFotter(context));
-    });
+    return BlocListener<CounterBloc, CounterState>(
+      listener: (context, state) {
+        // declare anything we want to do after change state
+      },
+      child: BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
+        return Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(title: Text('Counter')),
+            body: _renderContent(context),
+            floatingActionButton: _renderFotter(context));
+      }),
+    );
   }
 
   Widget _renderContent(BuildContext context) {
