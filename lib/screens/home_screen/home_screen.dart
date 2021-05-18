@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.of(context).pushNamed('/counter');
         break;
       case 1:
+        Navigator.of(context).pushNamed('/login');
         break;
       default:
         return;
