@@ -14,6 +14,11 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  _onGoBack(BuildContext context) {
+    _hideSnackBar();
+    Navigator.pop(context, false);
+  }
+
   _showSnackBar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -54,11 +59,13 @@ class _CounterScreenState extends State<CounterScreen> {
         // declare anything we want to do after change state
       },
       child: BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
-        return Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(title: Text('Counter')),
-            body: _renderContent(context),
-            floatingActionButton: _renderFotter(context));
+        return WillPopScope(
+            child: Scaffold(
+                key: _scaffoldKey,
+                appBar: AppBar(title: Text('Counter')),
+                body: _renderContent(context),
+                floatingActionButton: _renderFotter(context)),
+            onWillPop: () => _onGoBack(context));
       }),
     );
   }
