@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 abstract class LoginEvent extends Equatable {
   const LoginEvent();
@@ -13,8 +12,8 @@ class LoginRequest extends LoginEvent {
   final String password;
 
   const LoginRequest({
-    @required this.username,
-    @required this.password,
+    required this.username,
+    required this.password,
   });
 
   @override
@@ -29,7 +28,7 @@ class LoginSuccess extends LoginEvent {
   final String userData;
 
   const LoginSuccess({
-    @required this.userData,
+    required this.userData,
   });
 
   @override
@@ -43,7 +42,7 @@ class LoginError extends LoginEvent {
   final String errorMessage;
 
   const LoginError({
-    @required this.errorMessage,
+    required this.errorMessage,
   });
 
   @override

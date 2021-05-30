@@ -5,7 +5,7 @@ import 'package:flutter_play_with_bloc/blocs/login/login.dart';
 import 'package:flutter_play_with_bloc/screens/login_screen/login_form.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();

@@ -16,14 +16,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      Api()
-          .LoginAPI(username: event.username, password: event.password)
-          .then((value) => {
-                if (value == "login_success")
-                  add(LoginSuccess(userData: value))
-                else
-                  add(LoginError(errorMessage: value))
-              });
+      try {
+        Api()
+            .loginAPI(username: event.username, password: event.password)
+            .then((value) => {
+                  if (value == "login_success")
+                    add(LoginSuccess(userData: value))
+                  else
+                    add(LoginError(errorMessage: value))
+                });
+      } catch (e) {
+        add(LoginError(errorMessage: e.toString()));
+      }
     }
     if (event is LoginError) {
       yield LoginState(isLoginRequest: false, errorLogin: event.errorMessage);

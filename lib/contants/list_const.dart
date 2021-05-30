@@ -1,7 +1,6 @@
 List<MenuModal> HomeMenuList = [
   MenuModal(0, "Counter", "asset/tachometer.png"),
   MenuModal(1, "Login", "asset/login.png"),
-  MenuModal(2, "Weather", "asset/cloudy.png"),
   MenuModal(3, "Todo List", "asset/to-do-list.png"),
 ];
 

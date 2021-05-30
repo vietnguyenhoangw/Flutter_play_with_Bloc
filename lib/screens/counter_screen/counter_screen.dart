@@ -5,7 +5,7 @@ import 'package:flutter_play_with_bloc/blocs/counter/counter.dart';
 import 'package:flutter_play_with_bloc/blocs/counter/counter_bloc.dart';
 
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({Key key}) : super(key: key);
+  const CounterScreen({Key? key}) : super(key: key);
 
   @override
   _CounterScreenState createState() => _CounterScreenState();
@@ -14,9 +14,10 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  _onGoBack(BuildContext context) {
+  Future<bool> _onGoBack(BuildContext context) async {
     _hideSnackBar();
-    Navigator.pop(context, false);
+    Navigator.of(context).pop();
+    return false;
   }
 
   _showSnackBar(String message, Color backgroundColor) {
@@ -36,7 +37,7 @@ class _CounterScreenState extends State<CounterScreen> {
     _hideSnackBar();
     int currentCounter = BlocProvider.of<CounterBloc>(context).state.counter;
     if (currentCounter >= 50) {
-      _showSnackBar("Current counter can't increase more", Colors.green[500]);
+      _showSnackBar("Current counter can't increase more", Colors.green[500]!);
     } else {
       BlocProvider.of<CounterBloc>(context).add(IncreaseCounter());
     }
@@ -78,7 +79,7 @@ class _CounterScreenState extends State<CounterScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
-              BoxShadow(color: Colors.blue[100], spreadRadius: 3),
+              BoxShadow(spreadRadius: 3, color: Colors.blue[100]!),
             ],
           ),
           child: Center(
@@ -96,12 +97,14 @@ class _CounterScreenState extends State<CounterScreen> {
         children: [
           new Spacer(flex: 1),
           new FloatingActionButton(
+            heroTag: "0",
             onPressed: () => _onPressDecrease(),
             child: const Icon(Icons.arrow_circle_down),
             backgroundColor: Colors.blue,
           ),
           new SizedBox(width: 10),
           new FloatingActionButton(
+            heroTag: "1",
             onPressed: () => _onPressIncrease(),
             child: const Icon(Icons.arrow_circle_up_outlined),
             backgroundColor: Colors.blue,

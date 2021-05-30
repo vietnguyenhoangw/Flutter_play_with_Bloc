@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_play_with_bloc/contants/list_const.dart';
+import 'package:flutter_play_with_bloc/screens/counter_screen/counter_screen.dart';
+import 'package:flutter_play_with_bloc/screens/login_screen/login_page.dart';
+import 'package:flutter_play_with_bloc/screens/todo_list_screen/auth_screen/login_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -13,10 +16,25 @@ class _HomeScreenState extends State<HomeScreen> {
   _onPressMenuItem(int index) {
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/counter');
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return CounterScreen();
+          }),
+        );
         break;
       case 1:
-        Navigator.of(context).pushNamed('/login');
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return LoginPage();
+          }),
+        );
+        break;
+      case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return TodoLoginPage();
+          }),
+        );
         break;
       default:
         return;
@@ -65,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
-          BoxShadow(color: Colors.blue[100], spreadRadius: 3),
+          BoxShadow(color: Colors.blue[100]!, spreadRadius: 3),
         ],
       ),
       margin: new EdgeInsets.all(20.0),

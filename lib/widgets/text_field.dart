@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 // ignore: must_be_immutable
 class CommonTextField extends StatefulWidget {
   final textFieldController;
-  String textFieldHint;
-  IconButton suffixIcon;
-  bool obscureText;
+  final textFieldHint;
+  final suffixIcon;
+  final obscureText;
 
   CommonTextField(
       {this.textFieldController,

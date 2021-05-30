@@ -5,7 +5,7 @@ import 'package:flutter_play_with_bloc/blocs/login/login.dart';
 import 'package:flutter_play_with_bloc/widgets/text_field.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm({Key key}) : super(key: key);
+  LoginForm({Key? key}) : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -61,7 +61,7 @@ class _LoginFormState extends State<LoginForm> {
 
         if (isLoginRequest == false && isLoged) {
           _hideSnackBar();
-          _showSnackBar("Login success", Colors.green[500]);
+          _showSnackBar("Login success", Colors.green[500]!);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
