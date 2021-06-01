@@ -63,7 +63,16 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthTodoBloc, AuthTodoState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AuthTodoStateSuccess) {
+          _hideSnackBar();
+          _showSnackBar("Login success", Colors.green);
+        }
+        if (state is AuthTodoStateFailure) {
+          _hideSnackBar();
+          _showSnackBar(state.authTodoError, Colors.red);
+        }
+      },
       child: BlocBuilder<AuthTodoBloc, AuthTodoState>(
         builder: (context, state) {
           return Scaffold(
@@ -107,30 +116,7 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
                   if (state is AuthTodoStateLoading) {
                     return CircularProgressIndicator();
                   } else {
-                    return ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(minWidth: double.infinity),
-                        child: TextButton(
-                            onPressed: () => _onPressLogin(),
-                            child: Text(
-                              "Login",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                  EdgeInsets.all(15.0),
-                                ),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        side: BorderSide(
-                                            color: Colors.green))))));
+                    return _renderLoginBtn();
                   }
                 },
               ),
@@ -139,5 +125,25 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
         ),
       ),
     );
+  }
+
+  ConstrainedBox _renderLoginBtn() {
+    return ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: double.infinity),
+        child: TextButton(
+            onPressed: () => _onPressLogin(),
+            child: Text(
+              "Login",
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.all(15.0),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        side: BorderSide(color: Colors.green))))));
   }
 }

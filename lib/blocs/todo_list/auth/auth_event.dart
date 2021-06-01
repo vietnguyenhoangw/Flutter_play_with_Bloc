@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_play_with_bloc/modals/todo_user.dart';
 
 abstract class AuthTodoEvent extends Equatable {
   const AuthTodoEvent();
@@ -25,7 +26,19 @@ class LoginRequest extends AuthTodoEvent {
       'LoginRequest { username: $username} /  password: $password}';
 }
 
-class LoginSuccess extends AuthTodoEvent {}
+class LoginSuccess extends AuthTodoEvent {
+  final TodoUser todoUser;
+
+  const LoginSuccess({
+    required this.todoUser,
+  });
+
+  @override
+  List<Object> get props => [todoUser];
+
+  @override
+  String toString() => 'LoginError error: $todoUser';
+}
 
 class LoginError extends AuthTodoEvent {
   final String errorMessage;

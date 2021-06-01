@@ -19,29 +19,28 @@ class AuthTodoBloc extends Bloc<AuthTodoEvent, AuthTodoState> {
     }
   }
 
-  Stream<AuthTodoState> _mapLoginRequestToState(AuthTodoEvent event) async* {
+  Stream<AuthTodoState> _mapLoginRequestToState(LoginRequest event) async* {
     yield AuthTodoStateLoading();
-
-    final username = event.props[0].toString();
-    final password = event.props[1].toString();
 
     try {
       TodoApi()
-          .todoLoginAPI(username: username, password: password)
+          .todoLoginAPI(username: event.username, password: event.password)
           .then((value) => {
                 if (value.runtimeType == TodoUser)
-                  {
-                    // TODO: HANDLE LOGIN SUCCESS
-                  }
+                  add(LoginSuccess(todoUser: value))
                 else
-                  {
-                    // TODO: HANDLE LOGIN FAILURE
-                  }
+                  add(LoginError(errorMessage: value))
               });
-    } catch (e) {}
+    } catch (e) {
+      add(LoginError(errorMessage: e.toString()));
+    }
   }
 
-  Stream<AuthTodoState> _mapLoginSuccessToState(AuthTodoEvent event) async* {}
+  Stream<AuthTodoState> _mapLoginSuccessToState(LoginSuccess event) async* {
+    yield AuthTodoStateSuccess(event.todoUser);
+  }
 
-  Stream<AuthTodoState> _mapLoginFailureToState(AuthTodoEvent event) async* {}
+  Stream<AuthTodoState> _mapLoginFailureToState(LoginError event) async* {
+    yield AuthTodoStateFailure(event.errorMessage);
+  }
 }

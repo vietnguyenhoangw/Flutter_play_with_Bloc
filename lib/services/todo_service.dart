@@ -24,13 +24,14 @@ class TodoApi {
             // "password": password.toString()
           }));
       dynamic bodyResponse = json.decode(response.body);
-      dynamic rawUser = bodyResponse["user"];
       if (bodyResponse != TodoErrorList.unable_to_login) {
+        dynamic rawUser = bodyResponse["user"];
         TodoUser userData = TodoUser.fromJson(rawUser);
         return userData;
       } else {
         // return errorr unable_to_login
-        return response.body;
+        String error = response.body;
+        return error.substring(1, error.length - 1);
       }
     } catch (e) {
       return ("Something get wrong! Status code ${e.toString()}");
