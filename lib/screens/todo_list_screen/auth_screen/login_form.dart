@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/auth/auth.dart';
+import 'package:flutter_play_with_bloc/screens/todo_list_screen/todo_home/todo_home_page.dart';
 import 'package:flutter_play_with_bloc/utils/utils.dart';
 import 'package:flutter_play_with_bloc/widgets/text_field.dart';
 
@@ -66,7 +67,11 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
       listener: (context, state) {
         if (state is AuthTodoStateSuccess) {
           _hideSnackBar();
-          _showSnackBar("Login success", Colors.green);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) {
+              return TodoHomePage();
+            }),
+          );
         }
         if (state is AuthTodoStateFailure) {
           _hideSnackBar();
