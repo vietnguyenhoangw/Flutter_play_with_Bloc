@@ -15,26 +15,28 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
   }
 
   Future<TodoListState> _mapTodoFetchedToState(TodoListState state) async {
-    if (state.hasReachedMax) return state;
+    // if (state.hasReachedMax) return state;
     try {
-      dynamic todos =
-          await TodoApi().todoListFetchedAPI(limit: _todoLimit, skip: 0);
-      if (state.status == TodoListStatus.initial) {
-        return state.copyWith(
-          status: TodoListStatus.success,
-          todos: todos,
-          hasReachedMax: false,
-        );
-      }
-      final posts =
-          await TodoApi().todoListFetchedAPI(limit: _todoLimit, skip: 0);
-      return posts.isEmpty
-          ? state.copyWith(hasReachedMax: true)
-          : state.copyWith(
-              status: TodoListStatus.success,
-              todos: List.of(state.todos)..addAll(posts),
-              hasReachedMax: false,
-            );
+      TodoApi().todoListFetchedAPI(limit: _todoLimit, skip: 0);
+      // dynamic todos =
+      //     await TodoApi().todoListFetchedAPI(limit: _todoLimit, skip: 0);
+      // if (state.status == TodoListStatus.initial) {
+      //   return state.copyWith(
+      //     status: TodoListStatus.success,
+      //     todos: todos,
+      //     hasReachedMax: false,
+      //   );
+      // }
+      // final posts =
+      //     await TodoApi().todoListFetchedAPI(limit: _todoLimit, skip: 0);
+      // return posts.isEmpty
+      //     ? state.copyWith(hasReachedMax: true)
+      //     : state.copyWith(
+      //         status: TodoListStatus.success,
+      //         todos: List.of(state.todos)..addAll(posts),
+      //         hasReachedMax: false,
+      //       );
+      return state;
     } on Exception {
       return state.copyWith(status: TodoListStatus.failure);
     }

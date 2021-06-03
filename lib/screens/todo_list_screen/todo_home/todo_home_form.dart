@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_state.dart';
 
@@ -11,6 +12,13 @@ class TodoHomeForm extends StatefulWidget {
 }
 
 class _TodoHomeFormState extends State<TodoHomeForm> {
+  @override
+  void initState() {
+    super.initState();
+
+    BlocProvider.of<TodoListBloc>(context).add(TodoListFetched());
+  }
+
   _logout(BuildContext screenContext, BuildContext arletContext) {
     _hideArlet(arletContext);
     Navigator.of(screenContext).pop();

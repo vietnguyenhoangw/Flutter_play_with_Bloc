@@ -45,8 +45,8 @@ class TodoApi {
       required int skip}) async {
     try {
       String userToken =
-          SpUtil().getStringFromLocal(SpUtilKey.userToken.toString()) as String;
-      print(']]]]]]]]]]]]]]] USERTOKEN: ${userToken}');
+          await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
+      print(']]]]]]]]]]]]]]] USERTOKEN: $userToken');
 
       String endpoint = baseUrl + "/task?limit=$limit&skip=$skip";
       http.Response response = await http.post(
