@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
+import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_state.dart';
 
 class TodoHomeForm extends StatefulWidget {
   const TodoHomeForm({Key? key}) : super(key: key);
@@ -69,17 +72,23 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _onBackPress(context),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-            title: Center(
-              child: Text('Todo Home'),
-            ),
-            automaticallyImplyLeading: false),
-        body: Container(),
-      ),
-    );
+    return BlocListener<TodoListBloc, TodoListState>(
+        listener: (context, state) {},
+        child: BlocBuilder<TodoListBloc, TodoListState>(
+          builder: (context, state) {
+            return WillPopScope(
+              onWillPop: () => _onBackPress(context),
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                    title: Center(
+                      child: Text('Todo Home'),
+                    ),
+                    automaticallyImplyLeading: false),
+                body: Container(),
+              ),
+            );
+          },
+        ));
   }
 }

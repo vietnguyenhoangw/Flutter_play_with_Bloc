@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_play_with_bloc/modals/todo_user.dart';
+import 'package:flutter_play_with_bloc/modals/todo_user_rp.dart';
 import 'package:flutter_play_with_bloc/services/todo_service.dart';
+import 'package:flutter_play_with_bloc/utils/utils.dart';
 import 'auth.dart';
 
 class AuthTodoBloc extends Bloc<AuthTodoEvent, AuthTodoState> {
@@ -26,8 +27,8 @@ class AuthTodoBloc extends Bloc<AuthTodoEvent, AuthTodoState> {
       TodoApi()
           .todoLoginAPI(username: event.username, password: event.password)
           .then((value) => {
-                if (value.runtimeType == TodoUser)
-                  add(LoginSuccess(todoUser: value))
+                if (value.runtimeType == TodoUserRP)
+                  _loginSuccess(value)
                 else
                   add(LoginError(errorMessage: value))
               });
@@ -37,10 +38,16 @@ class AuthTodoBloc extends Bloc<AuthTodoEvent, AuthTodoState> {
   }
 
   Stream<AuthTodoState> _mapLoginSuccessToState(LoginSuccess event) async* {
-    yield AuthTodoStateSuccess(event.todoUser);
+    yield AuthTodoStateSuccess(event.todoUserRP);
   }
 
   Stream<AuthTodoState> _mapLoginFailureToState(LoginError event) async* {
     yield AuthTodoStateFailure(event.errorMessage);
+  }
+
+  _loginSuccess(TodoUserRP todoUserRP) {
+    SpUtil().setStringToLocal(
+        SpUtilKey.userToken.toString(), todoUserRP.token.toString());
+    add(LoginSuccess(todoUserRP: todoUserRP));
   }
 }

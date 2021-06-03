@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
 import 'package:flutter_play_with_bloc/screens/todo_list_screen/todo_home/todo_home_form.dart';
 
 class TodoHomePage extends StatefulWidget {
@@ -12,8 +14,12 @@ class _TodoHomePageState extends State<TodoHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: TodoHomeForm(),
-    );
+        backgroundColor: Colors.white,
+        body: BlocProvider(
+          create: (context) {
+            return TodoListBloc();
+          },
+          child: TodoHomeForm(),
+        ));
   }
 }

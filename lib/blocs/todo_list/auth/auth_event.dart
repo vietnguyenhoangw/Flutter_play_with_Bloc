@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_play_with_bloc/modals/todo_user.dart';
+import 'package:flutter_play_with_bloc/modals/todo_user_rp.dart';
 
 abstract class AuthTodoEvent extends Equatable {
   const AuthTodoEvent();
@@ -27,17 +28,17 @@ class LoginRequest extends AuthTodoEvent {
 }
 
 class LoginSuccess extends AuthTodoEvent {
-  final TodoUser todoUser;
+  final TodoUserRP todoUserRP;
 
   const LoginSuccess({
-    required this.todoUser,
+    required this.todoUserRP,
   });
 
   @override
-  List<Object> get props => [todoUser];
+  List<Object> get props => [todoUserRP];
 
   @override
-  String toString() => 'LoginError error: $todoUser';
+  String toString() => 'LoginError error: $todoUserRP';
 }
 
 class LoginError extends AuthTodoEvent {
