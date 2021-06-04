@@ -4,12 +4,19 @@ part 'todo_user.g.dart';
 
 @JsonSerializable()
 class TodoUser {
+  @JsonKey(name: "age")
   dynamic age;
+  @JsonKey(name: "_id")
   String id;
+  @JsonKey(name: "name")
   String name;
+  @JsonKey(name: "email")
   String email;
+  @JsonKey(name: "createdAt")
   String createdAt;
+  @JsonKey(name: "updatedAt")
   String updatedAt;
+  @JsonKey(name: "__v")
   dynamic v;
 
   TodoUser({

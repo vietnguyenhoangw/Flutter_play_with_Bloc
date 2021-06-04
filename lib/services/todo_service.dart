@@ -46,16 +46,18 @@ class TodoApi {
     try {
       String userToken =
           await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
-      print(']]]]]]]]]]]]]]] USERTOKEN: $userToken');
-
       String endpoint = baseUrl + "/task?limit=$limit&skip=$skip";
-      http.Response response = await http.post(
+      http.Response response = await http.get(
         Uri.parse(endpoint),
         headers: {
+          'Authorization': 'Bearer $userToken',
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
         },
       );
+
+      print(']]]]]]]]]]]]]]] USERTOKEN: $response');
+
       // dynamic bodyResponse = json.decode(response.body);
       // if (bodyResponse != TodoErrorList.unable_to_login) {
       //   dynamic rawUser = bodyResponse["user"];

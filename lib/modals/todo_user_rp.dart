@@ -6,7 +6,9 @@ part 'todo_user_rp.g.dart';
 
 @JsonSerializable()
 class TodoUserRP {
+  @JsonKey(name: "user")
   TodoUser todoUser;
+  @JsonKey(name: "token")
   dynamic token;
 
   TodoUserRP({
