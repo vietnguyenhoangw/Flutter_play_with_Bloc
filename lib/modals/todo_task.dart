@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:flutter_play_with_bloc/modals/todo_user.dart';
-
 part 'todo_task.g.dart';
 
 @JsonSerializable()

@@ -1,4 +1,5 @@
 import 'package:flutter_play_with_bloc/contants/error_list.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task_list.dart';
 import 'package:flutter_play_with_bloc/modals/todo_user.dart';
 import 'package:flutter_play_with_bloc/modals/todo_user_rp.dart';
 import 'package:flutter_play_with_bloc/utils/utils.dart';
@@ -44,6 +45,8 @@ class TodoApi {
       required int limit,
       required int skip}) async {
     try {
+      print("]]]]]]]] $limit");
+      print("]]]]]]]] $skip");
       String userToken =
           await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
       String endpoint = baseUrl + "/task?limit=$limit&skip=$skip";
@@ -55,19 +58,13 @@ class TodoApi {
           "content-type": "application/json",
         },
       );
-
-      print(']]]]]]]]]]]]]]] USERTOKEN: $response');
-
-      // dynamic bodyResponse = json.decode(response.body);
-      // if (bodyResponse != TodoErrorList.unable_to_login) {
-      //   dynamic rawUser = bodyResponse["user"];
-      //   TodoUser userData = TodoUser.fromJson(rawUser);
-      //   return userData;
-      // } else {
-      //   // return errorr unable_to_login
-      //   String error = response.body;
-      //   return error.substring(1, error.length - 1);
-      // }
+      if (response.statusCode == 200) {
+        dynamic bodyResponse = json.decode(response.body);
+        TodoTaskList todoTaskList = TodoTaskList.fromJson(bodyResponse);
+        return todoTaskList;
+      } else {
+        return ("Something get wrong! Status code ${response.statusCode}");
+      }
     } catch (e) {
       return ("Something get wrong! Status code ${e.toString()}");
     }

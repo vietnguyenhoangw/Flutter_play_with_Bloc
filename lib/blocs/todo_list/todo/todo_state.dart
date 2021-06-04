@@ -6,33 +6,32 @@ class TodoListState extends Equatable {
   final TodoListStatus status;
   final List<dynamic> todos;
   final bool hasReachedMax;
-  final int skip;
+  final bool isFetching;
 
   const TodoListState({
     this.status = TodoListStatus.initial,
     this.todos = const <dynamic>[],
     this.hasReachedMax = false,
-    this.skip = 0,
+    this.isFetching = false,
   });
 
   TodoListState copyWith({
     TodoListStatus? status,
     List<dynamic>? todos,
     bool? hasReachedMax,
-    int? skip,
+    bool? isFetching,
   }) {
     return TodoListState(
         status: status ?? this.status,
         todos: todos ?? this.todos,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-        skip: skip ?? this.skip);
+        isFetching: isFetching ?? this.isFetching);
   }
 
   @override
-  String toString() {
-    return '''TodoListState { status: $status, skip: $skip, hasReachedMax: $hasReachedMax, posts: ${todos.length} }''';
-  }
+  String toString() =>
+      '''TodoListState { status: $status, skip: $isFetching, hasReachedMax: $hasReachedMax, todos: ${todos.length} }''';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status, todos, hasReachedMax, isFetching];
 }

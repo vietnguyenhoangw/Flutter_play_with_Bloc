@@ -7,4 +7,14 @@ abstract class TodoListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TodoListFetched extends TodoListEvent {}
+class TodoListFetched extends TodoListEvent {
+  int skip;
+
+  TodoListFetched({required this.skip});
+
+  @override
+  List<Object> get props => [skip];
+
+  @override
+  String toString() => 'TodoListFetched { skip: $skip}';
+}
