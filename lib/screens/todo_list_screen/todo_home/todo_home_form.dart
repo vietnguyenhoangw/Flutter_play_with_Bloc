@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_state.dart';
-import 'package:flutter_play_with_bloc/screens/todo_list_screen/todo_home/todo_list.dart';
+
+import '../../screen.dart';
 
 class TodoHomeForm extends StatefulWidget {
   static int todoSkip = 0;
@@ -41,6 +42,14 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
 
   _hideArlet(BuildContext arletContext) {
     Navigator.of(arletContext).pop();
+  }
+
+  _onPressAddTask() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return TodoAddTaskPage();
+      }),
+    );
   }
 
   Future<bool> _onBackPress(BuildContext context) async {
@@ -111,6 +120,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
             return WillPopScope(
               onWillPop: () => _onBackPress(context),
               child: Scaffold(
+                floatingActionButton: _addBtn(),
                 backgroundColor: Colors.white,
                 appBar: AppBar(
                     title: Center(
@@ -132,6 +142,15 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
         }
       },
     ));
+  }
+
+  FloatingActionButton _addBtn() {
+    return FloatingActionButton(
+      heroTag: "0",
+      onPressed: () => _onPressAddTask(),
+      child: const Icon(Icons.add),
+      backgroundColor: Colors.blue,
+    );
   }
 
   void _scrollListener() {

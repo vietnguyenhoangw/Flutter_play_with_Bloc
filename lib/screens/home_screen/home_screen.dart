@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_play_with_bloc/contants/list_const.dart';
-import 'package:flutter_play_with_bloc/screens/counter_screen/counter_screen.dart';
-import 'package:flutter_play_with_bloc/screens/login_screen/login_page.dart';
-import 'package:flutter_play_with_bloc/screens/todo_list_screen/auth_screen/login_page.dart';
+
+import '../screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
