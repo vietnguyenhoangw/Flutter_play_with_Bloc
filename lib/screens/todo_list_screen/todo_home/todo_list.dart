@@ -81,12 +81,9 @@ class _TodoListState extends State<TodoList> {
         visible: visible,
         child: Container(
           padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
-          child: Expanded(
-            flex: 0,
-            child: Text(
-              "No more data",
-              style: TextStyle(color: Colors.grey[700]!, fontSize: 18),
-            ),
+          child: Text(
+            "No more data",
+            style: TextStyle(color: Colors.grey[700]!, fontSize: 18),
           ),
         ));
   }

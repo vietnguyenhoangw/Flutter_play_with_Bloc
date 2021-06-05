@@ -156,12 +156,14 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   void _scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      setState(() {
-        isFetchingTodoList = true;
-      });
-      TodoHomeForm.todoSkip = TodoHomeForm.todoSkip + 10;
-      BlocProvider.of<TodoListBloc>(context)
-          .add(TodoListFetched(skip: TodoHomeForm.todoSkip));
+      if (!isFetchingTodoList) {
+        setState(() {
+          isFetchingTodoList = true;
+        });
+        TodoHomeForm.todoSkip = TodoHomeForm.todoSkip + 10;
+        BlocProvider.of<TodoListBloc>(context)
+            .add(TodoListFetched(skip: TodoHomeForm.todoSkip));
+      }
     }
   }
 }

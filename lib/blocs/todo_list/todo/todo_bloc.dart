@@ -14,6 +14,15 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       yield state.copyWith(isFetching: true);
       yield await _mapTodoFetchedToState(event, state);
     }
+    if (event is AddTaskRequest) {
+      yield await _mapAddTodoRequest(event, state);
+    }
+    if (event is AddTaskSuccess) {
+      yield await _mapAddTodoSuccess(event, state);
+    }
+    if (event is AddTaskFailure) {
+      yield await _mapAddTodoFailure(event, state);
+    }
   }
 
   Future<TodoListState> _mapTodoFetchedToState(
@@ -46,5 +55,20 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
     } on Exception {
       return state.copyWith(status: TodoListStatus.failure);
     }
+  }
+
+  Future<TodoListState> _mapAddTodoRequest(
+      AddTaskRequest event, TodoListState state) async {
+    return state;
+  }
+
+  Future<TodoListState> _mapAddTodoSuccess(
+      AddTaskSuccess event, TodoListState state) async {
+    return state;
+  }
+
+  Future<TodoListState> _mapAddTodoFailure(
+      AddTaskFailure event, TodoListState state) async {
+    return state;
   }
 }

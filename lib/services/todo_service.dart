@@ -45,8 +45,6 @@ class TodoApi {
       required int limit,
       required int skip}) async {
     try {
-      print("]]]]]]]] $limit");
-      print("]]]]]]]] $skip");
       String userToken =
           await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
       String endpoint = baseUrl + "/task?limit=$limit&skip=$skip";
