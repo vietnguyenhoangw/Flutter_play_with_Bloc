@@ -11,13 +11,14 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
   @override
   Stream<TodoListState> mapEventToState(TodoListEvent event) async* {
     if (event is TodoListFetched) {
+      yield state.copyWith(isFetching: true);
       yield await _mapTodoFetchedToState(event, state);
     }
   }
 
   Future<TodoListState> _mapTodoFetchedToState(
       TodoListFetched event, TodoListState state) async {
-    if (state.hasReachedMax) return state;
+    if (state.hasReachedMax) return state.copyWith(isFetching: false);
     try {
       final dataResponse = await TodoApi()
           .todoListFetchedAPI(limit: _todoLimit, skip: event.skip);
@@ -33,7 +34,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         final todoResponse = await TodoApi()
             .todoListFetchedAPI(limit: _todoLimit, skip: event.skip);
         return todoResponse.todoTaskList.isEmpty
-            ? state.copyWith(hasReachedMax: true)
+            ? state.copyWith(hasReachedMax: true, isFetching: false)
             : state.copyWith(
                 status: TodoListStatus.success,
                 todos: List.of(state.todos)..addAll(todoResponse.todoTaskList),

@@ -30,7 +30,7 @@ class TodoListState extends Equatable {
 
   @override
   String toString() =>
-      '''TodoListState { status: $status, skip: $isFetching, hasReachedMax: $hasReachedMax, todos: ${todos.length} }''';
+      '''TodoListState { status: $status, isFetching: $isFetching, hasReachedMax: $hasReachedMax, todos: ${todos.length} }''';
 
   @override
   List<Object> get props => [status, todos, hasReachedMax, isFetching];

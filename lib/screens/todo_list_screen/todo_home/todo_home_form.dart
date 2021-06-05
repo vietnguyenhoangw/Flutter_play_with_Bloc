@@ -97,8 +97,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   Widget build(BuildContext context) {
     return BlocListener<TodoListBloc, TodoListState>(
         listener: (context, state) {
-      if (state.status == TodoListStatus.failure ||
-          state.status == TodoListStatus.success) {
+      if (!state.isFetching) {
         setState(() {
           isFetchingTodoList = false;
         });
@@ -121,7 +120,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                 body: Container(
                   padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: TodoList(
-                      isBottomLoading: false,
+                      isBottomLoading: isFetchingTodoList,
                       todoTaskList: state.todos,
                       scrollController: scrollController),
                 ),
@@ -137,6 +136,9 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   void _scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
+      setState(() {
+        isFetchingTodoList = true;
+      });
       TodoHomeForm.todoSkip = TodoHomeForm.todoSkip + 10;
       BlocProvider.of<TodoListBloc>(context)
           .add(TodoListFetched(skip: TodoHomeForm.todoSkip));
