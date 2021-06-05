@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_play_with_bloc/modals/todo_task.dart';
 
 class TodoList extends StatefulWidget {
   final List<dynamic> todoTaskList;
   final ScrollController scrollController;
   final bool isBottomLoading;
+  final bool isNoMoreData;
 
   const TodoList(
       {Key? key,
       required this.todoTaskList,
       required this.scrollController,
+      required this.isNoMoreData,
       required this.isBottomLoading})
       : super(key: key);
 
@@ -33,12 +34,8 @@ class _TodoListState extends State<TodoList> {
             return Column(
               children: <Widget>[
                 _todoItem(todoList, index),
-                Visibility(
-                    visible: widget.isBottomLoading,
-                    child: Expanded(
-                      flex: 0,
-                      child: CircularProgressIndicator(),
-                    ))
+                _loadingIncator(widget.isBottomLoading),
+                _noMoreDataText(widget.isNoMoreData)
               ],
             );
           }
@@ -68,5 +65,29 @@ class _TodoListState extends State<TodoList> {
         ],
       ),
     );
+  }
+
+  Visibility _loadingIncator(bool visible) {
+    return Visibility(
+        visible: visible,
+        child: Expanded(
+          flex: 0,
+          child: CircularProgressIndicator(),
+        ));
+  }
+
+  Visibility _noMoreDataText(bool visible) {
+    return Visibility(
+        visible: visible,
+        child: Container(
+          padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
+          child: Expanded(
+            flex: 0,
+            child: Text(
+              "No more data",
+              style: TextStyle(color: Colors.grey[700]!, fontSize: 18),
+            ),
+          ),
+        ));
   }
 }

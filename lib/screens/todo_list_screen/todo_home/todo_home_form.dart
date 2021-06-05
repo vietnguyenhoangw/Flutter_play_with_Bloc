@@ -120,6 +120,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                 body: Container(
                   padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: TodoList(
+                      isNoMoreData: state.hasReachedMax,
                       isBottomLoading: isFetchingTodoList,
                       todoTaskList: state.todos,
                       scrollController: scrollController),
