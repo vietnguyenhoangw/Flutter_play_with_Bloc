@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task.dart';
 
 abstract class TodoListEvent extends Equatable {
   const TodoListEvent();
@@ -20,32 +21,14 @@ class TodoListFetched extends TodoListEvent {
   String toString() => 'TodoListFetched { skip: $skip}';
 }
 
-class AddTaskRequest extends TodoListEvent {
-  final String taskDescription;
+class AddNewTask extends TodoListEvent {
+  final TodoTask todoTask;
 
-  const AddTaskRequest({
-    required this.taskDescription,
-  });
+  AddNewTask({required this.todoTask});
 
   @override
-  List<Object> get props => [taskDescription];
+  List<Object> get props => [todoTask];
 
   @override
-  String toString() => 'AddTaskRequest { taskDescription: $taskDescription}}';
-}
-
-class AddTaskSuccess extends TodoListEvent {}
-
-class AddTaskFailure extends TodoListEvent {
-  final String errorMessage;
-
-  const AddTaskFailure({
-    required this.errorMessage,
-  });
-
-  @override
-  List<Object> get props => [errorMessage];
-
-  @override
-  String toString() => 'AddTaskFailure { errorMessage: $errorMessage}}';
+  String toString() => 'TodoListFetched { skip: $todoTask}';
 }

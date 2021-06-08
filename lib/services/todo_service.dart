@@ -1,6 +1,6 @@
 import 'package:flutter_play_with_bloc/contants/error_list.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task.dart';
 import 'package:flutter_play_with_bloc/modals/todo_task_list.dart';
-import 'package:flutter_play_with_bloc/modals/todo_user.dart';
 import 'package:flutter_play_with_bloc/modals/todo_user_rp.dart';
 import 'package:flutter_play_with_bloc/utils/utils.dart';
 import 'package:http/http.dart' as http;
@@ -60,6 +60,38 @@ class TodoApi {
         dynamic bodyResponse = json.decode(response.body);
         TodoTaskList todoTaskList = TodoTaskList.fromJson(bodyResponse);
         return todoTaskList;
+      } else {
+        return ("Something get wrong! Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ("Something get wrong! Status code ${e.toString()}");
+    }
+  }
+
+  Future<dynamic> addTodoAPI(
+      {Function(String)? onError, required String description}) async {
+    try {
+      String userToken =
+          await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
+      String endpoint = baseUrl + "/task";
+      http.Response response = await http.post(Uri.parse(endpoint),
+          headers: {
+            'Authorization': 'Bearer $userToken',
+            "Accept": "application/json",
+            "content-type": "application/json",
+          },
+          body: jsonEncode({
+            "description": description,
+          }));
+      if (response.statusCode == 201) {
+        dynamic bodyResponse = json.decode(response.body);
+        bool isSuccess = bodyResponse['success'];
+        if (isSuccess) {
+          TodoTask todoTask = TodoTask.fromJson(bodyResponse['data']);
+          return todoTask;
+        } else {
+          return ("Something get wrong!");
+        }
       } else {
         return ("Something get wrong! Status code ${response.statusCode}");
       }

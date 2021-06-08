@@ -113,6 +113,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
       }
     }, child: BlocBuilder<TodoListBloc, TodoListState>(
       builder: (context, state) {
+        print('000000000000000000 STATE: ${state}');
         switch (state.status) {
           case TodoListStatus.failure:
             return const Center(child: Text('failed to fetch todo task'));
@@ -130,7 +131,9 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                 body: Container(
                   padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: TodoList(
-                      isNoMoreData: state.hasReachedMax,
+                      isNoMoreData: BlocProvider.of<TodoListBloc>(context)
+                          .state
+                          .hasReachedMax,
                       isBottomLoading: isFetchingTodoList,
                       todoTaskList: state.todos,
                       scrollController: scrollController),
