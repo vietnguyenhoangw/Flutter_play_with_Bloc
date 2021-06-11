@@ -15,6 +15,10 @@ class TodoTaskBloc extends Bloc<TodoTaskEvent, TodoTaskState> {
     if (event is AddTaskRequest) {
       yield TodoTaskStateLoading();
       yield await _mapAddTaskRequestToState(event);
+      return;
+    }
+    if (event is DeleteTaskRequest) {
+      yield await _mapDeleteTaskRequestToState(event);
     }
   }
 
@@ -25,6 +29,16 @@ class TodoTaskBloc extends Bloc<TodoTaskEvent, TodoTaskState> {
       return TodoTaskStateSuccess(response);
     } else {
       return TodoTaskStateFailure(response);
+    }
+  }
+
+  Future<TodoTaskState> _mapDeleteTaskRequestToState(
+      DeleteTaskRequest event) async {
+    dynamic response = await TodoApi().deleteTodoAPI(todoTask: event.todoTask);
+    if (response.runtimeType == bool && response == true) {
+      return DeleteTaskStateSuccess(event.todoTask);
+    } else {
+      return DeleteTaskStateFailure(response);
     }
   }
 }

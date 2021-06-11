@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task.dart';
 
 abstract class TodoTaskEvent extends Equatable {
   const TodoTaskEvent();
@@ -19,4 +20,18 @@ class AddTaskRequest extends TodoTaskEvent {
 
   @override
   String toString() => 'AddTaskRequest { description: $description}';
+}
+
+class DeleteTaskRequest extends TodoTaskEvent {
+  final TodoTask todoTask;
+
+  const DeleteTaskRequest({
+    required this.todoTask,
+  });
+
+  @override
+  List<Object> get props => [todoTask];
+
+  @override
+  String toString() => 'DeleteTaskRequest { todoTask: $todoTask}';
 }

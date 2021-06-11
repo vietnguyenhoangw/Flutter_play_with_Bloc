@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_play_with_bloc/modals/todo_task.dart';
+import 'package:flutter_play_with_bloc/Constants/Constatns.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoList extends StatefulWidget {
@@ -7,10 +7,12 @@ class TodoList extends StatefulWidget {
   final ScrollController scrollController;
   final bool isBottomLoading;
   final bool isNoMoreData;
+  final dynamic onPressSecondaryItemBtn;
 
   const TodoList(
       {Key? key,
       required this.todoTaskList,
+      required this.onPressSecondaryItemBtn,
       required this.scrollController,
       required this.isNoMoreData,
       required this.isBottomLoading})
@@ -20,21 +22,7 @@ class TodoList extends StatefulWidget {
   _TodoListState createState() => _TodoListState();
 }
 
-class PressItemTypes {
-  final String edit = "EDIT";
-  final String delete = "DELETE";
-}
-
 class _TodoListState extends State<TodoList> {
-  _onPressSecondaryItemBtn(TodoTask todoTask, String type) {
-    if (type == PressItemTypes().edit) {
-      print(">>>>>>>>> EDIT ${todoTask.description}");
-    }
-    if (type == PressItemTypes().delete) {
-      print(">>>>>>>>> DELETE  ${todoTask.description}");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     List<dynamic> todoList = widget.todoTaskList;
@@ -60,7 +48,7 @@ class _TodoListState extends State<TodoList> {
 
   Slidable _todoItem(List<dynamic> todoList, int index) {
     return Slidable(
-      key: Key(todoList[index].toString()),
+      key: Key(todoList[index].id.toString()),
       actionPane: SlidableBehindActionPane(),
       actionExtentRatio: 0.25,
       child: Container(
@@ -89,13 +77,13 @@ class _TodoListState extends State<TodoList> {
         _secondaryCustomBtn(
           Colors.green[400]!,
           new Icon(Icons.edit),
-          () => _onPressSecondaryItemBtn(
+          () => widget.onPressSecondaryItemBtn(
               widget.todoTaskList[index], PressItemTypes().edit),
         ),
         _secondaryCustomBtn(
             Colors.red[400]!,
             new Icon(Icons.delete),
-            () => _onPressSecondaryItemBtn(
+            () => widget.onPressSecondaryItemBtn(
                 widget.todoTaskList[index], PressItemTypes().delete))
       ],
     );

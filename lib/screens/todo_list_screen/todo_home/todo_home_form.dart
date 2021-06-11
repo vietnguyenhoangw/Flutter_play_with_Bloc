@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_play_with_bloc/Constants/Constatns.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_state.dart';
+import 'package:flutter_play_with_bloc/blocs/todo_list/todo_task/todo_task.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../screen.dart';
 
@@ -17,6 +21,7 @@ class TodoHomeForm extends StatefulWidget {
 
 class _TodoHomeFormState extends State<TodoHomeForm> {
   late ScrollController scrollController;
+  late SlidableController slidableController;
   bool isFetchingTodoList = false;
 
   @override
@@ -24,6 +29,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
     super.initState();
     scrollController = new ScrollController()
       ..addListener(() => _scrollListener());
+    slidableController = new SlidableController();
     BlocProvider.of<TodoListBloc>(context)
         .add(TodoListFetched(skip: TodoHomeForm.todoSkip));
   }
@@ -35,7 +41,19 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
     super.dispose();
   }
 
+  _onPressSecondaryItemBtn(TodoTask todoTask, String type) {
+    _hideSnackBar();
+    if (type == PressItemTypes().edit) {
+      return;
+    }
+    if (type == PressItemTypes().delete) {
+      BlocProvider.of<TodoTaskBloc>(context)
+          .add(DeleteTaskRequest(todoTask: todoTask));
+    }
+  }
+
   _logout(BuildContext screenContext, BuildContext arletContext) {
+    _hideSnackBar();
     _hideArlet(arletContext);
     Navigator.of(screenContext).pop();
   }
@@ -45,6 +63,7 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   }
 
   _onPressAddTask() {
+    _hideSnackBar();
     bool hasReachedMax =
         BlocProvider.of<TodoListBloc>(context).state.hasReachedMax;
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -56,6 +75,19 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                   .add(AddNewTask(todoTask: value))
             }
         });
+  }
+
+  _showSnackBar(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+      ),
+    );
+  }
+
+  _hideSnackBar() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 
   Future<bool> _onBackPress(BuildContext context) async {
@@ -110,53 +142,82 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TodoListBloc, TodoListState>(
-        listener: (context, state) {
-      if (!state.isFetching) {
-        setState(() {
-          isFetchingTodoList = false;
-        });
-      }
-    }, child: BlocBuilder<TodoListBloc, TodoListState>(
-      builder: (context, state) {
-        switch (state.status) {
-          case TodoListStatus.failure:
-            return const Center(child: Text('failed to fetch todo task'));
-          case TodoListStatus.success:
-            return WillPopScope(
-              onWillPop: () => _onBackPress(context),
-              child: Scaffold(
-                floatingActionButton: _addBtn(),
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                    title: Center(
-                      child: Text('Todo Home'),
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<TodoListBloc, TodoListState>(listener: (context, state) {
+            if (state is TodoListState) {
+              if (!state.isFetching) {
+                setState(() {
+                  isFetchingTodoList = false;
+                });
+              }
+            }
+          }),
+          BlocListener<TodoTaskBloc, TodoTaskState>(listener: (context, state) {
+            if (state is DeleteTaskStateFailure) {
+              _showSnackBar(state.deleteTaskError, Colors.red[500]!);
+            }
+            if (state is DeleteTaskStateSuccess) {
+              BlocProvider.of<TodoListBloc>(context)
+                  .add(DeleteTask(todoTask: state.todoTask));
+            }
+          })
+        ],
+        child: BlocBuilder<TodoListBloc, TodoListState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case TodoListStatus.failure:
+                return const Center(child: Text('failed to fetch todo task'));
+              case TodoListStatus.success:
+                return WillPopScope(
+                  onWillPop: () => _onBackPress(context),
+                  child: Scaffold(
+                    floatingActionButton: _addBtn(),
+                    backgroundColor: Colors.white,
+                    appBar: AppBar(
+                        title: Center(
+                          child: Text('Todo Home'),
+                        ),
+                        automaticallyImplyLeading: false),
+                    body: Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 15, left: 15, right: 15),
+                          child: TodoList(
+                              onPressSecondaryItemBtn: (todoTask, type) =>
+                                  _onPressSecondaryItemBtn(todoTask, type),
+                              isNoMoreData:
+                                  BlocProvider.of<TodoListBloc>(context)
+                                      .state
+                                      .hasReachedMax,
+                              isBottomLoading: isFetchingTodoList,
+                              todoTaskList: state.todos,
+                              scrollController: scrollController),
+                        ),
+                        Positioned(
+                          child: Visibility(
+                              visible: state.isFetching && !isFetchingTodoList,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              )),
+                        )
+                      ],
                     ),
-                    automaticallyImplyLeading: false),
-                body: Container(
-                  padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-                  child: TodoList(
-                      isNoMoreData: BlocProvider.of<TodoListBloc>(context)
-                          .state
-                          .hasReachedMax,
-                      isBottomLoading: isFetchingTodoList,
-                      todoTaskList: state.todos,
-                      scrollController: scrollController),
-                ),
-              ),
-            );
-          default:
-            return Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                    title: Center(
-                      child: Text('Todo Home'),
-                    ),
-                    automaticallyImplyLeading: false),
-                body: const Center(child: CircularProgressIndicator()));
-        }
-      },
-    ));
+                  ),
+                );
+              default:
+                return Scaffold(
+                    backgroundColor: Colors.white,
+                    appBar: AppBar(
+                        title: Center(
+                          child: Text('Todo Home'),
+                        ),
+                        automaticallyImplyLeading: false),
+                    body: const Center(child: CircularProgressIndicator()));
+            }
+          },
+        ));
   }
 
   FloatingActionButton _addBtn() {

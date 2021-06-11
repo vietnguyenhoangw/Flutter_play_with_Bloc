@@ -32,3 +32,15 @@ class AddNewTask extends TodoListEvent {
   @override
   String toString() => 'TodoListFetched { skip: $todoTask}';
 }
+
+class DeleteTask extends TodoListEvent {
+  final TodoTask todoTask;
+
+  DeleteTask({required this.todoTask});
+
+  @override
+  List<Object> get props => [todoTask];
+
+  @override
+  String toString() => 'TodoListFetched { skip: $todoTask}';
+}

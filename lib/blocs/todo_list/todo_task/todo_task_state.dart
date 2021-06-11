@@ -30,3 +30,22 @@ class TodoTaskStateFailure extends TodoTaskState {
   @override
   List<Object> get props => [todoTaskError];
 }
+
+// delele task
+class DeleteTaskStateSuccess extends TodoTaskState {
+  final TodoTask todoTask;
+
+  DeleteTaskStateSuccess(this.todoTask);
+
+  @override
+  List<Object> get props => [todoTask];
+}
+
+class DeleteTaskStateFailure extends TodoTaskState {
+  final String deleteTaskError;
+
+  DeleteTaskStateFailure(this.deleteTaskError);
+
+  @override
+  List<Object> get props => [deleteTaskError];
+}

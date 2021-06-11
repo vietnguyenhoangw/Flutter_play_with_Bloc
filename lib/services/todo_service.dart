@@ -99,4 +99,31 @@ class TodoApi {
       return ("Something get wrong! Status code ${e.toString()}");
     }
   }
+
+  Future<dynamic> deleteTodoAPI(
+      {Function(String)? onError, required TodoTask todoTask}) async {
+    try {
+      String userToken =
+          await SpUtil().getStringFromLocal(SpUtilKey.userToken.toString());
+      String endpoint = baseUrl + "/task/${todoTask.id.toString()}";
+      http.Response response = await http.delete(Uri.parse(endpoint), headers: {
+        'Authorization': 'Bearer $userToken',
+        "Accept": "application/json",
+        "content-type": "application/json",
+      });
+      if (response.statusCode == 200) {
+        dynamic bodyResponse = json.decode(response.body);
+        bool isSuccess = bodyResponse['success'];
+        if (isSuccess) {
+          return isSuccess;
+        } else {
+          return ("Something get wrong!");
+        }
+      } else {
+        return ("Something get wrong! Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ("Something get wrong! Status code ${e.toString()}");
+    }
+  }
 }
