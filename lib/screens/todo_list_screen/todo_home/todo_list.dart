@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_play_with_bloc/modals/todo_task.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoList extends StatefulWidget {
   final List<dynamic> todoTaskList;
@@ -18,7 +20,21 @@ class TodoList extends StatefulWidget {
   _TodoListState createState() => _TodoListState();
 }
 
+class PressItemTypes {
+  final String edit = "EDIT";
+  final String delete = "DELETE";
+}
+
 class _TodoListState extends State<TodoList> {
+  _onPressSecondaryItemBtn(TodoTask todoTask, String type) {
+    if (type == PressItemTypes().edit) {
+      print(">>>>>>>>> EDIT ${todoTask.description}");
+    }
+    if (type == PressItemTypes().delete) {
+      print(">>>>>>>>> DELETE  ${todoTask.description}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<dynamic> todoList = widget.todoTaskList;
@@ -42,27 +58,58 @@ class _TodoListState extends State<TodoList> {
         });
   }
 
-  Container _todoItem(List<dynamic> todoList, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(color: Colors.blue[100]!, spreadRadius: 3),
-        ],
-      ),
-      padding: const EdgeInsets.only(left: 20.0, top: 30.0, bottom: 30.0),
-      margin: const EdgeInsets.only(bottom: 15.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Text(
-              widget.todoTaskList[index].description,
-              style: TextStyle(color: Colors.grey[900]!),
+  Slidable _todoItem(List<dynamic> todoList, int index) {
+    return Slidable(
+      key: Key(todoList[index].toString()),
+      actionPane: SlidableBehindActionPane(),
+      actionExtentRatio: 0.25,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(color: Colors.blue[100]!, spreadRadius: 3),
+          ],
+        ),
+        padding: const EdgeInsets.only(left: 20.0, top: 30.0, bottom: 30.0),
+        margin: const EdgeInsets.only(bottom: 15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Text(
+                widget.todoTaskList[index].description,
+                style: TextStyle(color: Colors.grey[900]!),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      secondaryActions: <Widget>[
+        _secondaryCustomBtn(
+          Colors.green[400]!,
+          new Icon(Icons.edit),
+          () => _onPressSecondaryItemBtn(
+              widget.todoTaskList[index], PressItemTypes().edit),
+        ),
+        _secondaryCustomBtn(
+            Colors.red[400]!,
+            new Icon(Icons.delete),
+            () => _onPressSecondaryItemBtn(
+                widget.todoTaskList[index], PressItemTypes().delete))
+      ],
+    );
+  }
+
+  Container _secondaryCustomBtn(
+      Color csColor, Icon csIcon, VoidCallback onPress) {
+    return new Container(
+      margin: const EdgeInsets.only(bottom: 15.0),
+      padding: const EdgeInsets.only(top: 15, bottom: 15),
+      color: csColor,
+      child: new IconButton(
+        icon: csIcon,
+        onPressed: onPress,
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_bloc.dart';
-import 'package:flutter_play_with_bloc/blocs/todo_list/todo/todo_event.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo_task/todo_task.dart';
 import 'package:flutter_play_with_bloc/blocs/todo_list/todo_task/todo_task_event.dart';
 import 'package:flutter_play_with_bloc/modals/todo_task.dart';
