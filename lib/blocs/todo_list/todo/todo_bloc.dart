@@ -84,7 +84,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
                 todos: taskListTmp..addAll(todoResponse.todoTaskList),
                 isFetching: false);
       } else {
-        return state;
+        return state.copyWith(isFetching: false);
       }
     }
   }

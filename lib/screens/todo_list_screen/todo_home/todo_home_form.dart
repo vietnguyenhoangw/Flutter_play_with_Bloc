@@ -22,7 +22,8 @@ class TodoHomeForm extends StatefulWidget {
 class _TodoHomeFormState extends State<TodoHomeForm> {
   late ScrollController scrollController;
   late SlidableController slidableController;
-  bool isFetchingTodoList = false;
+  bool isLoadMoreTodoList = false;
+  bool isLoadingCenter = false;
 
   @override
   void initState() {
@@ -41,14 +42,14 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
     super.dispose();
   }
 
-  _onPressSecondaryItemBtn(TodoTask todoTask, String type) {
+  _onPressSecondaryItemBtn(
+      BuildContext context, TodoTask todoTask, String type) {
     _hideSnackBar();
     if (type == PressItemTypes().edit) {
       return;
     }
     if (type == PressItemTypes().delete) {
-      BlocProvider.of<TodoTaskBloc>(context)
-          .add(DeleteTaskRequest(todoTask: todoTask));
+      _onShowDeleteItemWarning(context, todoTask);
     }
   }
 
@@ -93,6 +94,28 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   Future<bool> _onBackPress(BuildContext context) async {
     _onShowLogoutWarning(context);
     return false;
+  }
+
+  Future<void> _onShowDeleteItemWarning(
+      BuildContext screenContext, TodoTask todoTask) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext arletContext) {
+        return _warningDialog(
+            "Message",
+            "Do you want to delete this item ?",
+            "Cancel",
+            "OK",
+            () => _hideArlet(arletContext),
+            () => {
+                  _hideArlet(arletContext),
+                  setState(() => isLoadingCenter = true),
+                  BlocProvider.of<TodoTaskBloc>(context)
+                      .add(DeleteTaskRequest(todoTask: todoTask))
+                });
+      },
+    );
   }
 
   Future<void> _onShowLogoutWarning(BuildContext screenContext) async {
@@ -148,7 +171,8 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
             if (state is TodoListState) {
               if (!state.isFetching) {
                 setState(() {
-                  isFetchingTodoList = false;
+                  isLoadMoreTodoList = false;
+                  isLoadingCenter = false;
                 });
               }
             }
@@ -186,18 +210,19 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                               top: 15, left: 15, right: 15),
                           child: TodoList(
                               onPressSecondaryItemBtn: (todoTask, type) =>
-                                  _onPressSecondaryItemBtn(todoTask, type),
+                                  _onPressSecondaryItemBtn(
+                                      context, todoTask, type),
                               isNoMoreData:
                                   BlocProvider.of<TodoListBloc>(context)
                                       .state
                                       .hasReachedMax,
-                              isBottomLoading: isFetchingTodoList,
+                              isBottomLoading: isLoadMoreTodoList,
                               todoTaskList: state.todos,
                               scrollController: scrollController),
                         ),
                         Positioned(
                           child: Visibility(
-                              visible: state.isFetching && !isFetchingTodoList,
+                              visible: isLoadingCenter,
                               child: const Center(
                                 child: CircularProgressIndicator(),
                               )),
@@ -232,9 +257,9 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   void _scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      if (!isFetchingTodoList) {
+      if (!isLoadMoreTodoList) {
         setState(() {
-          isFetchingTodoList = true;
+          isLoadMoreTodoList = true;
         });
         TodoHomeForm.todoSkip = TodoHomeForm.todoSkip + 10;
         BlocProvider.of<TodoListBloc>(context)
