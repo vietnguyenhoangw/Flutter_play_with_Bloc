@@ -23,8 +23,7 @@ class TodoTaskBloc extends Bloc<TodoTaskEvent, TodoTaskState> {
     dynamic response =
         await TodoApi().addTodoAPI(description: event.description);
     if (response.runtimeType == TodoTask) {
-      todoBloc.add(AddNewTask(todoTask: response));
-      return TodoTaskStateSuccess();
+      return TodoTaskStateSuccess(response);
     } else {
       return TodoTaskStateFailure(response);
     }

@@ -27,21 +27,24 @@ class _TodoAddTaskFormState extends State<TodoAddTaskForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<TodoTaskBloc, TodoTaskState>(
-        listener: (context, state) {},
-        child:
+        listener: (context, state) {
+      if (state is TodoTaskStateSuccess) {
+        Navigator.pop(context, state.todoTask);
+      }
+    }, child:
             BlocBuilder<TodoTaskBloc, TodoTaskState>(builder: (context, state) {
-          if (state is TodoTaskStateLoading) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text("Add new task"),
-                ),
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ));
-          } else {
-            return _buildScreenContent();
-          }
-        }));
+      if (state is TodoTaskStateLoading) {
+        return Scaffold(
+            appBar: AppBar(
+              title: Text("Add new task"),
+            ),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ));
+      } else {
+        return _buildScreenContent();
+      }
+    }));
   }
 
   GestureDetector _buildScreenContent() {

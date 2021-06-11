@@ -45,11 +45,17 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
   }
 
   _onPressAddTask() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) {
-        return TodoAddTaskPage();
-      }),
-    );
+    bool hasReachedMax =
+        BlocProvider.of<TodoListBloc>(context).state.hasReachedMax;
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return TodoAddTaskPage();
+    })).then((value) => {
+          if (hasReachedMax && value != null)
+            {
+              BlocProvider.of<TodoListBloc>(context)
+                  .add(AddNewTask(todoTask: value))
+            }
+        });
   }
 
   Future<bool> _onBackPress(BuildContext context) async {
@@ -113,7 +119,6 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
       }
     }, child: BlocBuilder<TodoListBloc, TodoListState>(
       builder: (context, state) {
-        print('000000000000000000 STATE: ${state}');
         switch (state.status) {
           case TodoListStatus.failure:
             return const Center(child: Text('failed to fetch todo task'));
@@ -141,7 +146,14 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
               ),
             );
           default:
-            return const Center(child: CircularProgressIndicator());
+            return Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                    title: Center(
+                      child: Text('Todo Home'),
+                    ),
+                    automaticallyImplyLeading: false),
+                body: const Center(child: CircularProgressIndicator()));
         }
       },
     ));

@@ -52,6 +52,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
   }
 
   Future<TodoListState> _mapAddTaskToState(AddNewTask event) async {
-    return state;
+    return state.copyWith(
+        todos: List.of(state.todos)..addAll([event.todoTask]));
   }
 }
