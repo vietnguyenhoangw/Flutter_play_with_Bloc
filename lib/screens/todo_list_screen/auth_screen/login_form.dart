@@ -33,6 +33,13 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
     });
   }
 
+  _onPressHelp() {
+    _hideSnackBar();
+    _showSnackBar(
+        "To save your time, we just removed register feature and you can write anything to username, password input to continue.",
+        Colors.grey[500]!);
+  }
+
   _onPressLogin() {
     _hideSnackBar();
     String validDataMessage = _validationData();
@@ -122,7 +129,13 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
                   if (state is AuthTodoStateLoading) {
                     return CircularProgressIndicator();
                   } else {
-                    return _renderLoginBtn();
+                    return Row(
+                      children: [
+                        Expanded(flex: 5, child: _renderLoginBtn()),
+                        Expanded(flex: 0, child: SizedBox(width: 10)),
+                        Expanded(flex: 1, child: _renderHelp())
+                      ],
+                    );
                   }
                 },
               ),
@@ -147,6 +160,26 @@ class _TodoLoginFormState extends State<TodoLoginForm> {
                   EdgeInsets.all(15.0),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        side: BorderSide(color: Colors.green))))));
+  }
+
+  ConstrainedBox _renderHelp() {
+    return ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: double.infinity),
+        child: TextButton(
+            onPressed: () => _onPressHelp(),
+            child: const Icon(
+              Icons.help,
+              color: Colors.green,
+            ),
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.all(15.0),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
