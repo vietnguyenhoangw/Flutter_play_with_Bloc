@@ -35,3 +35,20 @@ class DeleteTaskRequest extends TodoTaskEvent {
   @override
   String toString() => 'DeleteTaskRequest { todoTask: $todoTask}';
 }
+
+class EditTaskStatusRequest extends TodoTaskEvent {
+  final TodoTask todoTask;
+  final bool value;
+
+  const EditTaskStatusRequest({
+    required this.todoTask,
+    required this.value,
+  });
+
+  @override
+  List<Object> get props => [todoTask, value];
+
+  @override
+  String toString() =>
+      'EditTaskStatusRequest { todoTask: $todoTask / value: $value}';
+}

@@ -49,3 +49,22 @@ class DeleteTaskStateFailure extends TodoTaskState {
   @override
   List<Object> get props => [deleteTaskError];
 }
+
+// Edit status task
+class EditTaskStatusStateSuccess extends TodoTaskState {
+  final TodoTask todoTask;
+
+  EditTaskStatusStateSuccess(this.todoTask);
+
+  @override
+  List<Object> get props => [todoTask];
+}
+
+class EditTaskStatusStateFailure extends TodoTaskState {
+  final String editTaskStatusError;
+
+  EditTaskStatusStateFailure(this.editTaskStatusError);
+
+  @override
+  List<Object> get props => [editTaskStatusError];
+}

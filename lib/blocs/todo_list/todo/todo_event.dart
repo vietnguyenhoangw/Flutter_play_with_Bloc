@@ -30,7 +30,7 @@ class AddNewTask extends TodoListEvent {
   List<Object> get props => [todoTask];
 
   @override
-  String toString() => 'TodoListFetched { skip: $todoTask}';
+  String toString() => 'TodoListFetched { todoTask: $todoTask}';
 }
 
 class DeleteTask extends TodoListEvent {
@@ -42,5 +42,17 @@ class DeleteTask extends TodoListEvent {
   List<Object> get props => [todoTask];
 
   @override
-  String toString() => 'TodoListFetched { skip: $todoTask}';
+  String toString() => 'TodoListFetched { todoTask: $todoTask}';
+}
+
+class EditTaskStatus extends TodoListEvent {
+  final TodoTask todoTask;
+
+  EditTaskStatus({required this.todoTask});
+
+  @override
+  List<Object> get props => [todoTask];
+
+  @override
+  String toString() => 'EditTaskStatus { todoTask: $todoTask}';
 }

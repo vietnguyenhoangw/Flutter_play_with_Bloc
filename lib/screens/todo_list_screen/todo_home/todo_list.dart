@@ -8,6 +8,7 @@ class TodoList extends StatefulWidget {
   final bool isBottomLoading;
   final bool isNoMoreData;
   final dynamic onPressSecondaryItemBtn;
+  final dynamic onPressCheckBtn;
 
   const TodoList(
       {Key? key,
@@ -15,6 +16,7 @@ class TodoList extends StatefulWidget {
       required this.onPressSecondaryItemBtn,
       required this.scrollController,
       required this.isNoMoreData,
+      required this.onPressCheckBtn,
       required this.isBottomLoading})
       : super(key: key);
 
@@ -58,11 +60,22 @@ class _TodoListState extends State<TodoList> {
             BoxShadow(color: Colors.blue[100]!, spreadRadius: 3),
           ],
         ),
-        padding: const EdgeInsets.only(left: 20.0, top: 30.0, bottom: 30.0),
+        padding: const EdgeInsets.only(left: 20.0, top: 15.0, bottom: 15.0),
         margin: const EdgeInsets.only(bottom: 15.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Expanded(
+                flex: 0,
+                child: Checkbox(
+                  checkColor: Colors.greenAccent,
+                  value: todoList[index].completed,
+                  onChanged: (bool? value) =>
+                      widget.onPressCheckBtn(value, todoList[index]),
+                )),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               flex: 1,
               child: Text(
@@ -74,12 +87,12 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
       secondaryActions: <Widget>[
-        _secondaryCustomBtn(
-          Colors.green[400]!,
-          new Icon(Icons.edit),
-          () => widget.onPressSecondaryItemBtn(
-              widget.todoTaskList[index], PressItemTypes().edit),
-        ),
+        // _secondaryCustomBtn(
+        //   Colors.green[400]!,
+        //   new Icon(Icons.edit),
+        //   () => widget.onPressSecondaryItemBtn(
+        //       widget.todoTaskList[index], PressItemTypes().edit),
+        // ),
         _secondaryCustomBtn(
             Colors.red[400]!,
             new Icon(Icons.delete),

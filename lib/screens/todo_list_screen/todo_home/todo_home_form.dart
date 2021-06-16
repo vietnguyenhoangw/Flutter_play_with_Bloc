@@ -42,6 +42,12 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
     super.dispose();
   }
 
+  _onPressCheckTask(bool value, TodoTask todoTask) {
+    setState(() => isLoadingCenter = true);
+    BlocProvider.of<TodoTaskBloc>(context)
+        .add(EditTaskStatusRequest(todoTask: todoTask, value: value));
+  }
+
   _onPressSecondaryItemBtn(
       BuildContext context, TodoTask todoTask, String type) {
     _hideSnackBar();
@@ -185,6 +191,10 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
               BlocProvider.of<TodoListBloc>(context)
                   .add(DeleteTask(todoTask: state.todoTask));
             }
+            if (state is EditTaskStatusStateSuccess) {
+              BlocProvider.of<TodoListBloc>(context)
+                  .add(EditTaskStatus(todoTask: state.todoTask));
+            }
           })
         ],
         child: BlocBuilder<TodoListBloc, TodoListState>(
@@ -198,37 +208,8 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
                   child: Scaffold(
                     floatingActionButton: _addBtn(),
                     backgroundColor: Colors.white,
-                    appBar: AppBar(
-                        title: Center(
-                          child: Text('Todo Home'),
-                        ),
-                        automaticallyImplyLeading: false),
-                    body: Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                              top: 15, left: 15, right: 15),
-                          child: TodoList(
-                              onPressSecondaryItemBtn: (todoTask, type) =>
-                                  _onPressSecondaryItemBtn(
-                                      context, todoTask, type),
-                              isNoMoreData:
-                                  BlocProvider.of<TodoListBloc>(context)
-                                      .state
-                                      .hasReachedMax,
-                              isBottomLoading: isLoadMoreTodoList,
-                              todoTaskList: state.todos,
-                              scrollController: scrollController),
-                        ),
-                        Positioned(
-                          child: Visibility(
-                              visible: isLoadingCenter,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              )),
-                        )
-                      ],
-                    ),
+                    appBar: _buildAppBar(),
+                    body: _buildTodoList(state),
                   ),
                 );
               default:
@@ -243,6 +224,39 @@ class _TodoHomeFormState extends State<TodoHomeForm> {
             }
           },
         ));
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+        title: Center(
+          child: Text('Todo Home'),
+        ),
+        automaticallyImplyLeading: false);
+  }
+
+  Stack _buildTodoList(TodoListState state) {
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: TodoList(
+              onPressSecondaryItemBtn: (todoTask, type) =>
+                  _onPressSecondaryItemBtn(context, todoTask, type),
+              isNoMoreData: state.hasReachedMax,
+              isBottomLoading: isLoadMoreTodoList,
+              todoTaskList: state.todos,
+              scrollController: scrollController,
+              onPressCheckBtn: _onPressCheckTask),
+        ),
+        Positioned(
+          child: Visibility(
+              visible: isLoadingCenter,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              )),
+        )
+      ],
+    );
   }
 
   FloatingActionButton _addBtn() {

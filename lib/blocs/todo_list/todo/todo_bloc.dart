@@ -21,6 +21,10 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       yield state.copyWith(isFetching: true);
       yield await _mapDeleteTaskToState(event);
     }
+    if (event is EditTaskStatus) {
+      yield state.copyWith(isFetching: true);
+      yield await _mapEditTaskStatusToState(event);
+    }
   }
 
   Future<TodoListState> _mapTodoFetchedToState(
@@ -87,5 +91,16 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         return state.copyWith(isFetching: false);
       }
     }
+  }
+
+  Future<TodoListState> _mapEditTaskStatusToState(EditTaskStatus event) async {
+    List<dynamic> taskListTmp = state.todos.map((item) {
+      if (item.id == event.todoTask.id) {
+        return event.todoTask;
+      } else {
+        return item;
+      }
+    }).toList();
+    return state.copyWith(todos: taskListTmp, isFetching: false);
   }
 }
