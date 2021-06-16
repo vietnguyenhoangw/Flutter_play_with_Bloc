@@ -49,22 +49,23 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Column(
-        children: [_renderHeader(context), _renderListMenu(context)],
+        children: [_renderHeader(), _renderListMenu()],
       ),
     );
   }
 
-  Widget _renderHeader(BuildContext context) {
+  Widget _renderHeader() {
     return Expanded(
         flex: 2,
         child: Container(
+            color: Colors.white,
             margin: new EdgeInsets.all(20.0),
             child: Image(
               image: AssetImage("asset/image-background-1.jpg"),
             )));
   }
 
-  Widget _renderListMenu(BuildContext context) {
+  Widget _renderListMenu() {
     return Expanded(
         flex: 3,
         child: Container(
@@ -90,17 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
         child: TextButton(
           onPressed: () => _onPressMenuItem(index),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
+                  flex: 0,
                   child: Image(
+                      width: 30,
+                      height: 30,
                       image: AssetImage("${HomeMenuList[index].images}"))),
+              SizedBox(height: 10),
               Expanded(
-                  child: Center(
-                child: Text(
-                  "${HomeMenuList[index].tile}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ))
+                  flex: 0,
+                  child: Text(
+                    "${HomeMenuList[index].tile}",
+                    style: TextStyle(color: Colors.black),
+                  ))
             ],
           ),
         ),
