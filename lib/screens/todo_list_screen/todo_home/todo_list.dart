@@ -62,27 +62,54 @@ class _TodoListState extends State<TodoList> {
         ),
         padding: const EdgeInsets.only(left: 20.0, top: 15.0, bottom: 15.0),
         margin: const EdgeInsets.only(bottom: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-                flex: 0,
-                child: Checkbox(
-                  checkColor: Colors.greenAccent,
-                  value: todoList[index].completed,
-                  onChanged: (bool? value) =>
-                      widget.onPressCheckBtn(value, todoList[index]),
-                )),
-            SizedBox(
-              width: 10,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 0,
+                  child: Text(
+                    "Task name:",
+                    style: TextStyle(
+                        color: Colors.grey[900]!, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      todoList[index].description,
+                      style: TextStyle(
+                          color: Colors.grey[600]!,
+                          fontWeight: FontWeight.bold),
+                    )),
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                widget.todoTaskList[index].description,
-                style: TextStyle(color: Colors.grey[900]!),
-              ),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 0,
+                  child: Text(
+                    "Finish task",
+                    style: TextStyle(
+                        color: Colors.grey[900]!, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Checkbox(
+                        checkColor: Colors.greenAccent,
+                        value: todoList[index].completed,
+                        onChanged: (bool? value) =>
+                            widget.onPressCheckBtn(value, todoList[index]),
+                      ),
+                    )),
+              ],
+            )
           ],
         ),
       ),
