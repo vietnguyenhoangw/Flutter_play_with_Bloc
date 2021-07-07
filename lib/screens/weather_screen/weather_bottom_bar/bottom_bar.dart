@@ -21,27 +21,19 @@ class _BottomBarState extends State<BottomBar> {
     checkPermission();
   }
 
-  checkPermission() {
-    /**
-     * TODO: PERMISSION
-     * Check this method user never display location
-     * 
-     */
-    PermissionUtil.checkPermission(Permission.location).then((value) => {
-          value == PermissionStatus.denied
-              ? setState(() {
-                  _isAllowLocation = false;
-                })
-              : setState(() {
-                  _isAllowLocation = true;
-                })
-        });
-    PermissionUtil.requirePermission(Permission.location).then((value) => {
-          if (value == PermissionStatus.granted)
-            setState(() {
-              _isAllowLocation = true;
-            })
-        });
+  checkPermission() async {
+    final locationPermission =
+        await PermissionUtil.requirePermission(Permission.location);
+    if (locationPermission == PermissionStatus.denied ||
+        locationPermission == PermissionStatus.permanentlyDenied) {
+      setState(() {
+        _isAllowLocation = false;
+      });
+    } else {
+      setState(() {
+        _isAllowLocation = true;
+      });
+    }
   }
 
   void _onItemTapped(int index) {
