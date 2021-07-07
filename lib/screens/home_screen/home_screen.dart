@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_play_with_bloc/contants/list_const.dart';
+import 'package:flutter_play_with_bloc/screens/weather_screen/weather_bottom_bar/bottom_bar.dart';
 
 import '../screen.dart';
 
@@ -32,6 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) {
             return TodoLoginPage();
+          }),
+        );
+        break;
+      case 3:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return BottomBar();
           }),
         );
         break;
@@ -72,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: GridView.count(
           physics: new ScrollPhysics(),
           crossAxisCount: 3,
-          children: List.generate(HomeMenuList.length, (index) {
+          children: List.generate(homeMenuList.length, (index) {
             return Center(child: _renderMenuItem(context, index));
           }),
         )));
@@ -98,12 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Image(
                       width: 30,
                       height: 30,
-                      image: AssetImage("${HomeMenuList[index].images}"))),
+                      image: AssetImage("${homeMenuList[index].images}"))),
               SizedBox(height: 10),
               Expanded(
                   flex: 0,
                   child: Text(
-                    "${HomeMenuList[index].tile}",
+                    "${homeMenuList[index].tile}",
                     style: TextStyle(color: Colors.black),
                   ))
             ],
