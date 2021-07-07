@@ -16,7 +16,6 @@ class PermissionUtil {
       // We didn't ask for permission yet.
       if (permission == Permission.location) {
         var isPermanentlyDenied = await permission.request();
-        print('ISPERMANENTLYDENIED: ${isPermanentlyDenied}');
         return !(isPermanentlyDenied == PermissionStatus.permanentlyDenied)
             ? await permission.request()
             : PermissionStatus.permanentlyDenied;
