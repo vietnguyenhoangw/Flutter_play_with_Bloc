@@ -10,31 +10,18 @@ abstract class WeatherEvent extends Equatable {
 class GetCurrentWeatherRequest extends WeatherEvent {
   final String lat;
   final String long;
+  final DateTime today;
 
   const GetCurrentWeatherRequest({
     required this.lat,
     required this.long,
+    required this.today,
   });
 
   @override
   List<Object> get props => [lat, long];
 
   @override
-  String toString() => 'GetCurrentWeatherRequest { lat: $lat} /  long: $long}';
-}
-
-class GetCurrentWeatherSuccess extends WeatherEvent {}
-
-class GetCurrentWeatherError extends WeatherEvent {
-  final String errorMessage;
-
-  const GetCurrentWeatherError({
-    required this.errorMessage,
-  });
-
-  @override
-  List<Object> get props => [errorMessage];
-
-  @override
-  String toString() => 'GetCurrentWeatherError error: $errorMessage';
+  String toString() =>
+      'GetCurrentWeatherRequest { lat: $lat} / long: $long}/ today: $today}';
 }

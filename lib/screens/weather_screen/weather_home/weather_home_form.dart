@@ -43,6 +43,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
     BlocProvider.of<WeatherBloc>(context).add(GetCurrentWeatherRequest(
       lat: latitude.toString(),
       long: longitude.toString(),
+      today: DateTime.now(),
     ));
   }
 

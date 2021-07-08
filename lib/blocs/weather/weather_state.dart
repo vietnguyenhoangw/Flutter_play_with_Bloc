@@ -13,4 +13,11 @@ class WeatherStateLoading extends WeatherState {}
 
 class GetCurrentLocationWeatherStateSuccess extends WeatherState {}
 
-class GetCurrentLocationWeatherStateFailure extends WeatherState {}
+class GetCurrentLocationWeatherStateFailure extends WeatherState {
+  final String getCurrentLocationWeatherError;
+
+  GetCurrentLocationWeatherStateFailure(this.getCurrentLocationWeatherError);
+
+  @override
+  List<Object> get props => [getCurrentLocationWeatherError];
+}
