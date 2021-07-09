@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_play_with_bloc/blocs/weather/weather.dart';
 import 'package:flutter_play_with_bloc/modals/location_weather.dart';
+import 'dart:async';
 
 class WeatherSearchForm extends StatefulWidget {
   const WeatherSearchForm({Key? key}) : super(key: key);
@@ -12,8 +13,24 @@ class WeatherSearchForm extends StatefulWidget {
 }
 
 class _WeatherSearchFormState extends State<WeatherSearchForm> {
+  Timer? _debounce;
   final TextEditingController _textController = TextEditingController();
   String get _text => _textController.text;
+  String textValue = "";
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  _onSearchTextFieldChange(String val) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1300), () {
+      BlocProvider.of<WeatherBloc>(context)
+          .add(SearchLocationRequest(locationName: val));
+    });
+  }
 
   _onPressSearch() {
     if (_text.isNotEmpty) {
@@ -57,6 +74,7 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
                           Expanded(
                               flex: 1,
                               child: TextField(
+                                onChanged: _onSearchTextFieldChange,
                                 controller: _textController,
                                 decoration: const InputDecoration(
                                   labelText: 'City',
@@ -108,12 +126,7 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
         );
       }
     } else {
-      return Container(
-        height: MediaQuery.of(context).size.height - 160,
-        child: Center(
-          child: Text("Have something wrong in fetch data process."),
-        ),
-      );
+      return Container();
     }
   }
 
