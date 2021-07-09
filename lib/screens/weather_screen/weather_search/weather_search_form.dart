@@ -53,6 +53,7 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
     return GestureDetector(
         onTap: _hideKeyBoard,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text("Search location"),
           ),
@@ -122,7 +123,9 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
       } else {
         return Container(
           height: MediaQuery.of(context).size.height - 160,
-          child: Center(child: Text("No data")),
+          child: Center(
+            child: Text("No data"),
+          ),
         );
       }
     } else {

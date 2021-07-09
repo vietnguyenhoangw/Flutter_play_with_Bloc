@@ -96,12 +96,13 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
                 return CircularProgressIndicator();
               } else if (state is GetCurrentLocationWeatherStateSuccess) {
                 return Container(
+                    color: Colors.blue[50],
                     child: SmartRefresher(
-                  enablePullDown: true,
-                  controller: _refreshController,
-                  child: _buildScreenContentLayout(state),
-                  onRefresh: _onRefresh,
-                ));
+                      enablePullDown: true,
+                      controller: _refreshController,
+                      child: _buildScreenContentLayout(state),
+                      onRefresh: _onRefresh,
+                    ));
               } else {
                 return Container(
                   child: Center(
@@ -117,25 +118,28 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   Container _buildScreenContentLayout(
       GetCurrentLocationWeatherStateSuccess weatherState) {
     return Container(
-      color: Colors.blue[50],
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        decoration: new BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-            color: Colors.white,
-            borderRadius: new BorderRadius.all(
-              const Radius.circular(20.0),
-            )),
+      height: MediaQuery.of(context).size.height - 150,
+      child: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height - 190,
           margin: const EdgeInsets.all(20),
-          child: _buildWeatherContent(weatherState),
+          decoration: new BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              color: Colors.white,
+              borderRadius: new BorderRadius.all(
+                const Radius.circular(20.0),
+              )),
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            child: _buildWeatherContent(weatherState),
+          ),
         ),
       ),
     );
