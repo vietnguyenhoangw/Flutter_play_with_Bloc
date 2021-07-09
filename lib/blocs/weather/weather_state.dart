@@ -13,6 +13,7 @@ class WeatherStateInitialized extends WeatherState {}
 
 class WeatherStateLoading extends WeatherState {}
 
+// Get current location weather
 class GetCurrentLocationWeatherStateSuccess extends WeatherState {
   final Weather weather;
   final LocationWeather locationWeather;
@@ -30,4 +31,23 @@ class GetCurrentLocationWeatherStateFailure extends WeatherState {
 
   @override
   List<Object> get props => [getCurrentLocationWeatherError];
+}
+
+// Search location
+class SearchLocationStateSuccess extends WeatherState {
+  final List<LocationWeather> locations;
+
+  SearchLocationStateSuccess(this.locations);
+
+  @override
+  List<Object> get props => [locations];
+}
+
+class SearchLocationStateFailure extends WeatherState {
+  final String searchLocationError;
+
+  SearchLocationStateFailure(this.searchLocationError);
+
+  @override
+  List<Object> get props => [searchLocationError];
 }

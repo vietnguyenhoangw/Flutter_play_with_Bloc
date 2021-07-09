@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_play_with_bloc/blocs/weather/weather.dart';
 
 class WeatherSearchForm extends StatefulWidget {
   const WeatherSearchForm({Key? key}) : super(key: key);
@@ -12,7 +14,10 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
   final TextEditingController _textController = TextEditingController();
   String get _text => _textController.text;
 
-  _onPressSearch() {}
+  _onPressSearch() {
+    BlocProvider.of<WeatherBloc>(context)
+        .add(SearchLocationRequest(locationName: "san"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
                       controller: _textController,
                       decoration: const InputDecoration(
                         labelText: 'City',
-                        hintText: 'Chicago',
+                        hintText: 'Chicago, London...',
                       ),
                     )),
                 Expanded(

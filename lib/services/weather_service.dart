@@ -52,4 +52,32 @@ class WeatherApi {
       return ("Something get wrong! Status code ${e.toString()}");
     }
   }
+
+  Future<dynamic> searchLocationAPI({
+    Function(String)? onError,
+    required String location,
+  }) async {
+    try {
+      String endpoint = baseUrl + "/api/location/search/?query=$location";
+      http.Response response = await http.get(
+        Uri.parse(endpoint),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> bodyResponse = json.decode(response.body);
+        List<LocationWeather> listWeather = [];
+        for (var item in bodyResponse) {
+          LocationWeather locationWeather =
+              LocationWeather.fromJsonstringtify(item);
+          if (listWeather.length < 10) {
+            listWeather.add(locationWeather);
+          }
+        }
+        return listWeather;
+      } else {
+        return ("Something get wrong! Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ("Something get wrong! Status code ${e.toString()}");
+    }
+  }
 }

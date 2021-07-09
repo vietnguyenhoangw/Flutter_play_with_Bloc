@@ -14,6 +14,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       yield WeatherStateLoading();
       yield await _mapGetCurrentWeatherRequestToState(event);
     }
+    if (event is SearchLocationRequest) {
+      yield WeatherStateLoading();
+      yield await _mapSearchLocationRequestToState(event);
+    }
   }
 
   Future<WeatherState> _mapGetCurrentWeatherRequestToState(
@@ -37,6 +41,18 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       }
     } else {
       return GetCurrentLocationWeatherStateFailure(locationResponse.toString());
+    }
+  }
+
+  Future<WeatherState> _mapSearchLocationRequestToState(
+      SearchLocationRequest event) async {
+    dynamic locationResponse = await WeatherApi().searchLocationAPI(
+      location: event.locationName,
+    );
+    if (locationResponse is List<LocationWeather>) {
+      return SearchLocationStateSuccess(locationResponse);
+    } else {
+      return SearchLocationStateFailure(locationResponse);
     }
   }
 }

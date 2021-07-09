@@ -25,3 +25,17 @@ class GetCurrentWeatherRequest extends WeatherEvent {
   String toString() =>
       'GetCurrentWeatherRequest { lat: $lat} / long: $long}/ today: $today}';
 }
+
+class SearchLocationRequest extends WeatherEvent {
+  final String locationName;
+
+  const SearchLocationRequest({
+    required this.locationName,
+  });
+
+  @override
+  List<Object> get props => [locationName];
+
+  @override
+  String toString() => 'SearchLocationRequest { locationName: $locationName}';
+}
