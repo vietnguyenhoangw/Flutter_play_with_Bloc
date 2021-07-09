@@ -7,6 +7,7 @@ import 'package:flutter_play_with_bloc/modals/location_weather.dart';
 import 'package:flutter_play_with_bloc/modals/weather.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class WeatherHomeForm extends StatefulWidget {
   const WeatherHomeForm({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class WeatherHomeForm extends StatefulWidget {
 }
 
 class _WeatherHomeFormState extends State<WeatherHomeForm> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   double latitude = 0;
   double longitude = 0;
 
@@ -42,6 +45,12 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
     }
   }
 
+  _onRefresh() {
+    _getCurrentPosition().then((value) => {
+          if (value) _getCurrentLocationWeather(),
+        });
+  }
+
   _getCurrentLocationWeather() {
     BlocProvider.of<WeatherBloc>(context).add(GetCurrentWeatherRequest(
       lat: latitude.toString(),
@@ -60,7 +69,12 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
             if (state is WeatherStateLoading) {
               return CircularProgressIndicator();
             } else if (state is GetCurrentLocationWeatherStateSuccess) {
-              return _buildScreenContentLayout(state);
+              return SmartRefresher(
+                enablePullDown: true,
+                controller: _refreshController,
+                child: _buildScreenContentLayout(state),
+                onRefresh: _onRefresh,
+              );
             } else {
               return Container();
             }
