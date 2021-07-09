@@ -59,7 +59,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   }
 
   _onPressSearch() async {
-    LocationWeather location = await Navigator.of(context).push(
+    dynamic location = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return WeatherSearchPage();
       }),
@@ -103,7 +103,11 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
                   onRefresh: _onRefresh,
                 ));
               } else {
-                return Container();
+                return Container(
+                  child: Center(
+                    child: Text("Have something wrong in fetch data process."),
+                  ),
+                );
               }
             })),
       ),

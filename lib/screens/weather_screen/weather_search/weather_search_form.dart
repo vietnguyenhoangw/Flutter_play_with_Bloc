@@ -16,9 +16,11 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
   String get _text => _textController.text;
 
   _onPressSearch() {
-    _hideKeyBoard();
-    BlocProvider.of<WeatherBloc>(context)
-        .add(SearchLocationRequest(locationName: _text));
+    if (_text.isNotEmpty) {
+      _hideKeyBoard();
+      BlocProvider.of<WeatherBloc>(context)
+          .add(SearchLocationRequest(locationName: _text));
+    }
   }
 
   _onPressListItem(LocationWeather location) {
@@ -46,6 +48,7 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
                     left: 20.0,
                     right: 20.0,
                     top: 10.0,
+                    bottom: 10.0,
                   ),
                   child: Column(
                     children: [
@@ -81,25 +84,36 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
     if (state is WeatherStateLoading) {
       return Container(
         child: Expanded(
-          flex: 1,
           child: Center(child: CircularProgressIndicator()),
         ),
       );
     } else if (state is SearchLocationStateSuccess) {
       List<LocationWeather> locations = state.locations;
+      if (locations.length > 0) {
+        return Container(
+          child: Expanded(
+            flex: 1,
+            child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: locations.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _buildListItem(locations, index);
+                }),
+          ),
+        );
+      } else {
+        return Container(
+          height: MediaQuery.of(context).size.height - 160,
+          child: Center(child: Text("No data")),
+        );
+      }
+    } else {
       return Container(
-        child: Expanded(
-          flex: 1,
-          child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: locations.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildListItem(locations, index);
-              }),
+        height: MediaQuery.of(context).size.height - 160,
+        child: Center(
+          child: Text("Have something wrong in fetch data process."),
         ),
       );
-    } else {
-      return Container();
     }
   }
 
