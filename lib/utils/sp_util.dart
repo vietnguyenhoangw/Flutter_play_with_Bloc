@@ -1,6 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum SpUtilKey { userToken }
+enum SpUtilKey {
+  userToken,
+  weather,
+}
 
 class SpUtil {
   Future<bool> setStringToLocal(String key, String value) async {
