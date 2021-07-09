@@ -16,20 +16,23 @@ class _WeatherSearchFormState extends State<WeatherSearchForm> {
   String get _text => _textController.text;
 
   _onPressSearch() {
+    _hideKeyBoard();
     BlocProvider.of<WeatherBloc>(context)
-        .add(SearchLocationRequest(locationName: "san"));
+        .add(SearchLocationRequest(locationName: _text));
   }
 
   _onPressListItem(LocationWeather location) {
     Navigator.of(context).pop(location);
   }
 
+  _hideKeyBoard() {
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+        onTap: _hideKeyBoard,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Search location"),

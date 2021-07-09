@@ -55,9 +55,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   }
 
   _onRefresh() {
-    _getCurrentPosition().then((value) => {
-          if (value) _getCurrentLocationWeather(),
-        });
+    _getCurrentLocationWeather();
   }
 
   _onPressSearch() async {
