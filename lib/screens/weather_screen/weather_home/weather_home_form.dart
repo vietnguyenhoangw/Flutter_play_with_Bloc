@@ -61,12 +61,19 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   }
 
   _onPressSearch() async {
-    final city = await Navigator.of(context).push(
+    LocationWeather location = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return WeatherSearchPage();
       }),
     );
-    print(">>>>>>>>>> $city");
+    if (location is LocationWeather) {
+      List<dynamic> lattlong = location.lattLong.toString().split(",");
+      setState(() {
+        latitude = double.parse(lattlong[0]);
+        longitude = double.parse(lattlong[1]);
+      });
+      _getCurrentLocationWeather();
+    }
   }
 
   @override
