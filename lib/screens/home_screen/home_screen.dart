@@ -51,13 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text('Play with Bloc'),
-        ),
-      ),
+      appBar: AppBar(title: Center(child: Text('Play with Bloc'))),
       body: Column(
-        children: [_renderHeader(), _renderListMenu()],
+        children: [
+          _renderHeader(),
+          _renderListMenu(),
+        ],
       ),
     );
   }
@@ -68,9 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
             color: Colors.white,
             margin: new EdgeInsets.all(20.0),
-            child: Image(
-              image: AssetImage("asset/image-background-1.jpg"),
-            )));
+            child: Image(image: AssetImage("asset/image-background-1.jpg"))));
   }
 
   Widget _renderListMenu() {

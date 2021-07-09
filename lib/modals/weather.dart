@@ -2,6 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'weather.g.dart';
 
+final String baseImageUrl =
+    "https://www.metaweather.com/static/img/weather/png/64/";
+
 @JsonSerializable()
 class Weather {
   @JsonKey(name: "id")
@@ -56,4 +59,8 @@ class Weather {
   factory Weather.fromJson(Map<String, dynamic> json) =>
       _$WeatherFromJson(json);
   Map<String, dynamic> toJson() => _$WeatherToJson(this);
+
+  returnImageWeather(String weatherStateAbbr) {
+    return baseImageUrl + "$weatherStateAbbr.png";
+  }
 }

@@ -29,7 +29,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         woeid: woeid,
       );
       if (weatherResponse is Weather) {
-        return GetCurrentLocationWeatherStateSuccess();
+        return GetCurrentLocationWeatherStateSuccess(
+            weatherResponse, locationResponse);
       } else {
         return GetCurrentLocationWeatherStateFailure(
             weatherResponse.toString());
