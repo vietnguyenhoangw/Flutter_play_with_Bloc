@@ -48,9 +48,6 @@ class _BottomBarState extends State<BottomBar> {
         WeatherBottomMenuItems.loadWeatherBottomMenuItems();
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Weather app'),
-        ),
         body: Center(child: renderBody(_selectedIndex, childListItems)),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.blue,

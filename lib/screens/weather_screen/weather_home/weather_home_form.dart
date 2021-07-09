@@ -5,6 +5,7 @@ import 'package:flutter_play_with_bloc/blocs/weather/weather.dart';
 import 'package:flutter_play_with_bloc/blocs/weather/weather_bloc.dart';
 import 'package:flutter_play_with_bloc/modals/location_weather.dart';
 import 'package:flutter_play_with_bloc/modals/weather.dart';
+import 'package:flutter_play_with_bloc/screens/weather_screen/weather_search/weather_search.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -45,12 +46,6 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
     }
   }
 
-  _onRefresh() {
-    _getCurrentPosition().then((value) => {
-          if (value) _getCurrentLocationWeather(),
-        });
-  }
-
   _getCurrentLocationWeather() {
     BlocProvider.of<WeatherBloc>(context).add(GetCurrentWeatherRequest(
       lat: latitude.toString(),
@@ -59,26 +54,54 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
     ));
   }
 
+  _onRefresh() {
+    _getCurrentPosition().then((value) => {
+          if (value) _getCurrentLocationWeather(),
+        });
+  }
+
+  _onPressSearch() async {
+    final city = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return WeatherSearchPage();
+      }),
+    );
+    print(">>>>>>>>>> $city");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: BlocListener<WeatherBloc, WeatherState>(
-          listener: (context, state) {},
-          child:
-              BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
-            if (state is WeatherStateLoading) {
-              return CircularProgressIndicator();
-            } else if (state is GetCurrentLocationWeatherStateSuccess) {
-              return SmartRefresher(
-                enablePullDown: true,
-                controller: _refreshController,
-                child: _buildScreenContentLayout(state),
-                onRefresh: _onRefresh,
-              );
-            } else {
-              return Container();
-            }
-          })),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Weather"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            tooltip: "Search somewhere",
+            onPressed: _onPressSearch,
+          )
+        ],
+      ),
+      body: Center(
+        child: BlocListener<WeatherBloc, WeatherState>(
+            listener: (context, state) {},
+            child: BlocBuilder<WeatherBloc, WeatherState>(
+                builder: (context, state) {
+              if (state is WeatherStateLoading) {
+                return CircularProgressIndicator();
+              } else if (state is GetCurrentLocationWeatherStateSuccess) {
+                return Container(
+                    child: SmartRefresher(
+                  enablePullDown: true,
+                  controller: _refreshController,
+                  child: _buildScreenContentLayout(state),
+                  onRefresh: _onRefresh,
+                ));
+              } else {
+                return Container();
+              }
+            })),
+      ),
     );
   }
 
