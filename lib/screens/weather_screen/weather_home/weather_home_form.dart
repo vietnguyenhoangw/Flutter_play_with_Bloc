@@ -25,6 +25,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   double latitude = 0;
   double longitude = 0;
   Weather? currentWeather;
+  bool isSave = false;
 
   @override
   void initState() {
@@ -32,6 +33,12 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
     _getCurrentPosition().then((value) => {
           if (value) _getCurrentLocationWeather(),
         });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _hideSnackBar();
   }
 
   Future<bool> _getCurrentPosition() async {
@@ -52,10 +59,37 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
   _addWeatherToSave() {
     SpUtil spUtil = new SpUtil();
     String weatherJson = jsonEncode(currentWeather!);
-    spUtil.setStringToLocal(
-      SpUtilKey.weather.toString(),
-      weatherJson,
+    spUtil
+        .setStringToLocal(
+          SpUtilKey.weather.toString(),
+          weatherJson,
+        )
+        .then((value) => {
+              if (value == true)
+                {
+                  _showSnackBar("Add to save success", Colors.green),
+                  setState(() {
+                    isSave = true;
+                  }),
+                }
+              else
+                {
+                  _showSnackBar("Add to save failure", Colors.red),
+                }
+            });
+  }
+
+  _showSnackBar(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+      ),
     );
+  }
+
+  _hideSnackBar() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 
   _getCurrentLocationWeather() {
@@ -81,6 +115,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
       setState(() {
         latitude = double.parse(lattlong[0]);
         longitude = double.parse(lattlong[1]);
+        isSave = false;
       });
       _getCurrentLocationWeather();
     }
@@ -329,7 +364,7 @@ class _WeatherHomeFormState extends State<WeatherHomeForm> {
               right: 20,
             ),
             child: Icon(
-              Icons.favorite_border,
+              isSave ? Icons.favorite : Icons.favorite_border,
               color: Colors.red,
             ),
           ),
